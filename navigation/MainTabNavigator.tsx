@@ -14,7 +14,7 @@ import { MainTabParamList, MainScreens, TabTwoParamList } from "../types";
 
 const MainTab = createMaterialTopTabNavigator<MainTabParamList>();
 
-export default function BottomTabNavigator() {
+export default function MainTabNavigator() {
   const colorScheme = useColorScheme();
 
   return (
