@@ -6,7 +6,13 @@ import {
 import { createStackNavigator } from "@react-navigation/stack";
 
 import * as React from "react";
-import { ColorSchemeName, View } from "react-native";
+import {
+  ColorSchemeName,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import Colors from "../constants/Colors";
 import {
   Octicons,
@@ -16,6 +22,8 @@ import {
 } from "@expo/vector-icons";
 
 import ChatRoomScreen from "../screens/ChatRoomScreen";
+import ContactsScreen from "../screens/ContactsScreen";
+
 import NotFoundScreen from "../screens/NotFoundScreen";
 import { RootStackParamList } from "../types";
 import MainTabNavigator from "./MainTabNavigator";
@@ -85,7 +93,7 @@ function RootNavigator() {
       <Stack.Screen
         name="ChatRoom"
         component={ChatRoomScreen}
-        options={({ route }) => ({
+        options={({ navigation, route }) => ({
           title: route.params.name,
           headerRight: () => (
             <View
@@ -96,17 +104,44 @@ function RootNavigator() {
                 marginRight: 10,
               }}
             >
-              <FontAwesome5 name="video" size={22} color={"white"} />
-              <MaterialIcons name="call" size={22} color={"white"} />
+              <FontAwesome5 name="video" size={20} color={"white"} />
+              <MaterialIcons name="call" size={20} color={"white"} />
               <MaterialCommunityIcons
                 name="dots-vertical"
-                size={22}
+                size={20}
                 color={"white"}
+              />
+            </View>
+          ),
+          headerLeft: () => (
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-around",
+                alignItems: "center",
+                width: 70,
+              }}
+            >
+              <TouchableOpacity
+                onPress={navigation.goBack}
+                style={{
+                  // borderWidth: 1,
+                  // borderColor: "#000",
+
+                  paddingVertical: 10,
+                }}
+              >
+                <MaterialIcons name="arrow-back" size={24} color={"white"} />
+              </TouchableOpacity>
+              <Image
+                source={{ uri: route.params.imageUri }}
+                style={{ width: 35, height: 35, borderRadius: 25, padding: 5 }}
               />
             </View>
           ),
         })}
       />
+      <Stack.Screen name="Contacts" component={ContactsScreen} />
       <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}

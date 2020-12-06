@@ -9,8 +9,6 @@ const styles = StyleSheet.create({
     width: windowWidth,
     justifyContent: "space-between",
     padding: 10,
-    borderBottomWidth: 1,
-    borderColor: "rgba(0,0,0,0.1)",
   },
   leftContainer: {
     flexDirection: "row",
@@ -29,12 +27,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
-  lastMessage: {
+  status: {
     fontSize: 16,
-    color: "grey",
-  },
-  time: {
-    fontSize: 14,
     color: "grey",
   },
 });

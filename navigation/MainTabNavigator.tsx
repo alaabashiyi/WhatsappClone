@@ -10,6 +10,7 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ChatsScreen from "../screens/ChatsScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
+import ContactsScreen from "../screens/ContactsScreen";
 import { MainTabParamList, MainScreens, TabTwoParamList } from "../types";
 
 const MainTab = createMaterialTopTabNavigator<MainTabParamList>();
