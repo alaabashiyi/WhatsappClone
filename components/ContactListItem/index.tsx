@@ -23,6 +23,7 @@ const ContactListItem = (props: ContactListItemProps) => {
 
   const onClick = async () => {
     try {
+      // CHALLENGE, CHECK IF YOU HAVE A CHATROOM WITH THAT USER, IF SO NAVIGATE TO IT, IF NOT CREATE IT
       // 1. Create a new chatroom
       const newChatRoomData = await API.graphql(
         graphqlOperation(createChatRoom, {
