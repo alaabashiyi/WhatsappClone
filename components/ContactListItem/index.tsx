@@ -11,6 +11,10 @@ export type ContactListItemProps = {
 
 const ContactListItem = (props: ContactListItemProps) => {
   const { user } = props;
+  const userImage =
+    user.imageUr === null
+      ? `https://randomuser.me/api/portraits/women/50.jpg`
+      : user.imageUr;
 
   const navigation = useNavigation();
 
@@ -20,7 +24,12 @@ const ContactListItem = (props: ContactListItemProps) => {
     <TouchableWithoutFeedback onPress={onClick}>
       <View style={styles.container}>
         <View style={styles.leftContainer}>
-          <Image source={{ uri: user.imageUri }} style={styles.avatar} />
+          <Image
+            source={{
+              uri: userImage,
+            }}
+            style={styles.avatar}
+          />
           <View style={styles.midContainer}>
             <Text style={styles.username}>{user.name}</Text>
             <Text
