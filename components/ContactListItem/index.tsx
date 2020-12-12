@@ -5,6 +5,9 @@ import styles from "./style";
 import moment from "moment";
 import { useNavigation } from "@react-navigation/native";
 
+import { API, graphqlOperation, Auth } from "aws-amplify";
+import { createChatRoom, createChatRoomUser } from "../../graphql/mutations";
+
 export type ContactListItemProps = {
   user: User;
 };
@@ -18,7 +21,54 @@ const ContactListItem = (props: ContactListItemProps) => {
 
   const navigation = useNavigation();
 
-  const onClick = () => {};
+  const onClick = async () => {
+    try {
+      // 1. Create a new chatroom
+      const newChatRoomData = await API.graphql(
+        graphqlOperation(createChatRoom, {
+          input: {},
+        })
+      );
+
+      if (!newChatRoomData.data) {
+        console.log("Failed to create chatroom");
+        return;
+      }
+
+      const newChatRoom = newChatRoomData.data.createChatRoom;
+      // 2. Add user to the chatroom
+
+      await API.graphql(
+        graphqlOperation(createChatRoomUser, {
+          input: {
+            userID: user.id,
+            chatRoomID: newChatRoom.id,
+          },
+        })
+      );
+
+      // 3. Add authenticated user to the chatroom
+
+      const userInfo = await Auth.currentAuthenticatedUser();
+
+      await API.graphql(
+        graphqlOperation(createChatRoomUser, {
+          input: {
+            userID: userInfo.attributes.sub,
+            chatRoomID: newChatRoom.id,
+          },
+        })
+      );
+
+      navigation.navigate("ChatRoom", {
+        id: newChatRoom.id,
+        name: "Hardcoded name",
+        // imageUr: userInfo.imageUr,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={onClick}>
