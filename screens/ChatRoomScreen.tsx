@@ -15,18 +15,18 @@ const ChatRoomScreen = () => {
   const [messages, setMessages] = useState([]);
   const [myId, setMyId] = useState(null);
 
+  const fetchMessages = async () => {
+    const messagesData = await API.graphql(
+      graphqlOperation(messagesByChatRoom, {
+        chatRoomID: route.params.id,
+        sortDirection: "DESC",
+      })
+    );
+
+    setMessages(messagesData.data.messagesByChatRoom.items);
+  };
+
   useEffect(() => {
-    const fetchMessages = async () => {
-      const messagesData = await API.graphql(
-        graphqlOperation(messagesByChatRoom, {
-          chatRoomID: route.params.id,
-          sortDirection: "DESC",
-        })
-      );
-
-      setMessages(messagesData.data.messagesByChatRoom.items);
-    };
-
     fetchMessages();
   });
 
@@ -40,21 +40,21 @@ const ChatRoomScreen = () => {
     getMyId();
   });
 
-  // useEffect(() => {
-  //   const subscription = API.graphql(
-  //     graphqlOperation(onCreateMessage)
-  //   ).subscribe({
-  //     next: (data) => {
-  //       const newMessage = data.value.data.onCreateMessage;
-  //       if (newMessage.chatRoomID !== route.params.id) {
-  //         return;
-  //       }
-  //       setMessages([newMessage, ...messages]);
-  //     },
-  //   });
+  useEffect(() => {
+    const subscription = API.graphql(
+      graphqlOperation(onCreateMessage)
+    ).subscribe({
+      next: (data) => {
+        const newMessage = data.value.data.onCreateMessage;
+        if (newMessage.chatRoomID !== route.params.id) {
+          return;
+        }
+        fetchMessages();
+      },
+    });
 
-  //   return () => subscription.unsubscribe();
-  // }, []);
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <ImageBackground source={BG} style={{ width: "100%", height: "100%" }}>
