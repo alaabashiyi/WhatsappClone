@@ -18,7 +18,7 @@ export type ChatListItemProps = {
 
 const ChatListItem = (props: ChatListItemProps) => {
   const { chatRoom } = props;
-
+  console.log("CHATROOM HERE", chatRoom.lastMessage);
   const [otherUser, setOtherUser] = useState(null);
 
   useEffect(() => {
@@ -56,7 +56,9 @@ const ChatListItem = (props: ChatListItemProps) => {
               style={styles.lastMessage}
               ellipsizeMode={"tail"}
             >
-              {chatRoom.lastMessage ? chatRoom.lastMessage.content : ""}
+              {chatRoom.lastMessage
+                ? `${chatRoom.lastMessage.user.name}: ${chatRoom.lastMessage.content}`
+                : ""}
             </Text>
           </View>
         </View>

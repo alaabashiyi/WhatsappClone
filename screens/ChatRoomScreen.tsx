@@ -8,6 +8,7 @@ import BG from "../assets/images/BG.png";
 import InputBox from "../components/InputBox";
 import { API, Auth, graphqlOperation } from "aws-amplify";
 import { messagesByChatRoom } from "../graphql/queries";
+import { onCreateMessage } from "../graphql/subscriptions";
 
 const ChatRoomScreen = () => {
   const route = useRoute();
@@ -38,6 +39,22 @@ const ChatRoomScreen = () => {
 
     getMyId();
   });
+
+  // useEffect(() => {
+  //   const subscription = API.graphql(
+  //     graphqlOperation(onCreateMessage)
+  //   ).subscribe({
+  //     next: (data) => {
+  //       const newMessage = data.value.data.onCreateMessage;
+  //       if (newMessage.chatRoomID !== route.params.id) {
+  //         return;
+  //       }
+  //       setMessages([newMessage, ...messages]);
+  //     },
+  //   });
+
+  //   return () => subscription.unsubscribe();
+  // }, []);
 
   return (
     <ImageBackground source={BG} style={{ width: "100%", height: "100%" }}>
