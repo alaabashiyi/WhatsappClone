@@ -6,29 +6,50 @@ import ChatListItem from "../components/ChatListItem";
 import NewMessageButton from "../components/NewMessageButton";
 import { Text, View } from "../components/Themed";
 import { getUser } from "./queries";
-
+import { onCreateMessage } from "../graphql/subscriptions";
+import { useRoute } from "@react-navigation/native";
 export default function ChatsScreen() {
   const [chatRooms, setChatRooms] = useState([]);
+  const route = useRoute();
+
+  const fetchChatRooms = async () => {
+    try {
+      const userInfo = await Auth.currentAuthenticatedUser();
+
+      const userData = await API.graphql(
+        graphqlOperation(getUser, {
+          id: userInfo.attributes.sub,
+        })
+      );
+
+      setChatRooms(userData.data.getUser.chatRoomUser.items);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
-    const fetchChatRooms = async () => {
-      try {
-        const userInfo = await Auth.currentAuthenticatedUser();
-
-        const userData = await API.graphql(
-          graphqlOperation(getUser, {
-            id: userInfo.attributes.sub,
-          })
-        );
-
-        setChatRooms(userData.data.getUser.chatRoomUser.items);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
     fetchChatRooms();
   }, []);
+
+  useEffect(() => {
+    const subscription = API.graphql(
+      graphqlOperation(onCreateMessage)
+    ).subscribe({
+      next: (data) => {
+        // const newMessage = data.value.data.onCreateMessage;
+        // if (newMessage.chatRoomID !== route.params.id) {
+        //   return;
+        // }
+        fetchChatRooms();
+      },
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // console.log(chatRooms[0].chatRoom.lastMessage);
+
   return (
     <View style={styles.container}>
       <FlatList

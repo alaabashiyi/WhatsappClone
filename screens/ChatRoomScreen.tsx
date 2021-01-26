@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Text, FlatList, ImageBackground } from "react-native";
+import {
+  Text,
+  FlatList,
+  ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 
 import { useRoute } from "@react-navigation/native";
 
@@ -39,6 +45,10 @@ const ChatRoomScreen = () => {
 
     getMyId();
   });
+
+  // CHALLENGE
+  // subscribe to new messages only in the chatroom
+  // subscribe to ChatRoom updates
 
   useEffect(() => {
     const subscription = API.graphql(
